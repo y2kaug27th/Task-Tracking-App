@@ -1,5 +1,5 @@
 # Task-Tracking-App
-
+![Imgur Image](https://i.imgur.com/y6Xn3hA.png)
 ## 專案介紹
 
 此專案用意在於幫助使用者高效地管理和追蹤任務。
