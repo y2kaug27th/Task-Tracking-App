@@ -55,23 +55,27 @@ sequenceDiagram
 * JDK (Java Development Kit)：確保安裝 JDK 21 版本
 * Node.js：安裝 Node.js（建議版本 18 或以上）
 * Git：安裝 Git，用於拉取專案代碼
-* IDE：推薦使用 IntelliJ IDEA
-* Docker：用於容器化資料庫環境
+* Docker：安裝Dcker，用於容器化資料庫環境
 
 ### 運行專案：
+本專案需要三個終端進行操作（確保終端窗口保持開啟以正常運行）
 
+1. 用於啟動資料庫：
 ```
 git clone https://github.com/y2kaug27th/Task-Tracking-App.git
 cd Task-Tracking-App
 docker-compose up
-cd tasks-fe
+```
+2. 用於啟動後端服務：
+```
+cd Task-Tracking-App
+./mvnw verify
+cd target
+java -jar tasks-0.0.1-SNAPSHOT.jar
+```
+3. 用於啟動前端服務：
+```
+cd Task-Tracking-App/tasks-fe
 npm install
 npm run dev
 ```
-
-### 後端設置：
-1. 啟動 IntelliJ IDEA，開啟 Task-Tracking-App 資料夾
-2. 等待 Maven 下載所有必要的依賴庫
-3. 在專案目錄中找到 ```src\main\java\com\chenpinkao\tasks\TasksApplication.java```
-4. 執行 ```TaskTrackingApplication.java```
-5. 檢查後端是否正常運行
