@@ -17,12 +17,13 @@ flowchart LR
 
     subgraph Backend [後端]
         React -->|發送 REST API 請求| SpringBoot[Spring Boot]
-        SpringBoot -->|透過 ORM 操作資料| PostgreSQL[PostgreSQL 資料庫]
+        
     end
 
     subgraph Database [資料庫]
         Docker[Docker 容器]
-        Docker --> PostgreSQL
+        SpringBoot -->|透過 ORM 操作資料| PostgreSQL[PostgreSQL 資料庫]
+        Docker -->|運行 PostgreSQL| PostgreSQL
     end
 ```
 
