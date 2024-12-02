@@ -6,11 +6,30 @@
 使用者可以創建不同的任務清單，每個清單中可以包含多個任務，
 並能夠對任務進行編輯、刪除、標記為完成等操作。
 
+## 系統架構圖
+```mermaid
+flowchart LR
+    User[使用者] -->|操作任務| React[Vite + React]
 
-## 專案架構
+    subgraph Frontend [前端]
+        React
+    end
 
-* 後端：使用 Spring Boot 作為後端框架，提供 RESTful API 來處理任務清單與任務的 CRUD 操作。後端負責處理資料儲存、內容認證等功能。
+    subgraph Backend [後端]
+        React -->|發送 REST API 請求| SpringBoot[Spring Boot]
+        SpringBoot -->|透過 ORM 操作資料| PostgreSQL[PostgreSQL 資料庫]
+    end
+
+    subgraph Database [資料庫]
+        Docker[Docker 容器]
+        Docker --> PostgreSQL
+    end
+```
+
+## 建構環境
+
 * 前端：使用 Vite 搭配 React 作為前端框架，構建用戶界面。前端負責與後端 API 進行數據交互，顯示任務清單與任務，並提供交互方式。
+* 後端：使用 Spring Boot 作為後端框架，提供 RESTful API 來處理任務清單與任務的 CRUD 操作。利用 ORM 來簡化資料庫操作，負責處理資料儲存、內容認證等功能。
 * 資料庫：利用 Docker 搭建 PostgreSQL 資料庫來儲存所有的任務與任務清單資料。
 
 
@@ -20,7 +39,6 @@
 2. 任務管理：<br/>在每個任務清單中，使用者可以新增、編輯或刪除任務。每個任務會包含標題、描述、截止日期和優先順序，並且可以標記為完成。
 
 3. 任務追蹤：<br/>使用者可以查看任務的完成進度，幫助自己了解目前已完成的任務比例。
-
 
 
 ## 用戶流程
