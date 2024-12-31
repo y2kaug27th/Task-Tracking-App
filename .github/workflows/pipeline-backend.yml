@@ -27,6 +27,7 @@ jobs:
 
       - name: Compile project
         run: |
+          chmod +x mvnw
           ./mvnw clean compile
 
   build:
@@ -47,6 +48,7 @@ jobs:
 
       - name: Build backend
         run: |
+          chmod +x mvnw
           ./mvnw clean package
           
   build-image:
