@@ -61,12 +61,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'corretto'
-
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
