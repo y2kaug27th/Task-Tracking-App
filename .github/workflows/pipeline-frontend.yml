@@ -1,0 +1,59 @@
+name: Tasks Frontend API Pipeline
+on:
+  pull_request:
+  push:
+    paths:
+      - tasks-fe/**
+      - docker/frontend/**
+      - 'docker-compose.yml'
+      - .github/workflows/*-frontend.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          cd tasks-fe
+          npm ci
+
+      - name: Build frontend
+        run: |
+          cd tasks-fe
+          npm run build
+
+  build-image:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push to DockerHub
+        uses: docker/build-push-action@v6
+        with:
+          context: tasks-fe
+          file: docker/frontend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tasks-fe:1.0.0,${{ secrets.DOCKERHUB_USERNAME }}/tasks-fe:latest
