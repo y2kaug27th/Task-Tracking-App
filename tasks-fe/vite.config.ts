@@ -7,10 +7,20 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        // target: 'http://localhost:8080' if backend is running locally
+        target: 'http://backend:8080',
         changeOrigin: true,
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
-  }
+  },
+  preview: {
+      host:true,
+      port:5173
+  },
+  build: {
+      commonjsOptions: { transformMixedEsModules: true }
+
+    }
 })

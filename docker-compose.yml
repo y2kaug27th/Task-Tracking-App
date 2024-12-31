@@ -1,13 +1,25 @@
 services:
 
   db:
-
     image: postgres:latest
-
     ports:
       - "5432:5432"
-
     restart: always
-
     environment:
       POSTGRES_PASSWORD: password
+
+  backend:
+    image: tasks-be:1.0.0
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - db
+
+  frontend:
+    image: tasks-fe:1.0.0
+    ports:
+      - "5173:5173"
+    restart: always
+    depends_on:
+      - backend
