@@ -79,7 +79,7 @@ sequenceDiagram
 ### 運行專案：
 #### 方法一：於本地建構 Docker 映像檔
 
-1. 開啟開啟終端並輸入以下指令：
+1. 開啟終端並輸入以下指令：
 ```
 git clone https://github.com/y2kaug27th/Task-Tracking-App.git
 cd Task-Tracking-App
