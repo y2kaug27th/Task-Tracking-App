@@ -17,7 +17,7 @@ flowchart LR
 
     subgraph Backend [後端]
         React -->|發送 REST API 請求| SpringBoot[Spring Boot]
-        
+
     end
 
     subgraph Database [資料庫]
@@ -32,6 +32,8 @@ flowchart LR
 * 前端：使用 Vite 搭配 React 作為前端框架，構建用戶界面。前端負責與後端 API 進行數據交互，顯示任務清單與任務，並提供交互方式。
 * 後端：使用 Spring Boot 作為後端框架，提供 RESTful API 來處理任務清單與任務的 CRUD 操作。利用 ORM 來簡化資料庫操作，負責處理資料儲存、內容認證等功能。
 * 資料庫：利用 Docker 搭建 PostgreSQL 資料庫來儲存所有的任務與任務清單資料。
+
+※ 目前專案已完成前後端的 Dockerize，並透過 GitHub Actions 與 Docker Hub 建立 CI/CD 流程，確保程式能快速且穩定地部署。
 
 
 ## 功能介紹
@@ -71,30 +73,50 @@ sequenceDiagram
 ## 安裝步驟
 ### 前置準備：
 
-* JDK (Java Development Kit)：確保安裝 JDK 21 版本
-* Node.js：安裝 Node.js（建議版本 18 或以上）
 * Git：安裝 Git，用於拉取專案代碼
-* Docker：安裝Dcker，用於容器化資料庫環境
+* Docker：安裝Docker，用於容器化運行環境
 
 ### 運行專案：
-本專案需要三個終端進行操作（確保終端窗口保持開啟以正常運行）
+#### 方法一：於本地建構 Docker 映像檔
 
-1. 用於啟動資料庫：
+1. 開啟開啟終端並輸入以下指令：
 ```
 git clone https://github.com/y2kaug27th/Task-Tracking-App.git
 cd Task-Tracking-App
-docker-compose up
+docker build -t tasks-be:1.0.0 -f docker/backend/Dockerfile .
+cd tasks-fe
+docker build -t tasks-fe:1.0.0 -f ../docker/frontend/Dockerfile .
+cd ..
+docker compose up
 ```
-2. 用於啟動後端服務：
+2. 保持終端開啟，並在瀏覽器中訪問：```http://localhost:5173/```
+
+#### 方法二：於 Docker Hub 拉取映像檔
+
+1. 創建 ```docker-compose.yml``` ，並在檔案中添加以下指令：
 ```
-cd Task-Tracking-App
-./mvnw verify
-cd target
-java -jar tasks-0.0.1-SNAPSHOT.jar
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+  backend:
+    image: y2kaug27th/tasks-be:latest
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - db
+  frontend:
+    image: y2kaug27th/tasks-fe:latest
+    ports:
+      - "5173:5173"
+    restart: always
+    depends_on:
+      - backend
 ```
-3. 用於啟動前端服務：
-```
-cd Task-Tracking-App/tasks-fe
-npm install
-npm run dev
-```
+2. 開啟終端並輸入 ```docker compose up```
+4. 保持終端開啟，並在瀏覽器中訪問：```http://localhost:5173/```
